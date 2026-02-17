@@ -1,5 +1,6 @@
 ---
 on:
+  workflow_dispatch:     
   schedule:
     - cron: "0 7 * * *"  # Every day at 07:00 UTC
 permissions:
