@@ -1,0 +1,40 @@
+name: Run Python Script
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 6 * * 2'   # Every Tuesday 6 AM UTC
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Check if this is alternate Tuesday
+        id: weekcheck
+        run: |
+          WEEK_NUMBER=$(date +%V)
+          if [ $((WEEK_NUMBER % 2)) -eq 0 ]; then
+            echo "run=true" >> $GITHUB_OUTPUT
+          else
+            echo "run=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Python Script
+        if: steps.weekcheck.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          python script.py
