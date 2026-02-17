@@ -28,11 +28,14 @@ jobs:
         id: weekcheck
         run: |
           WEEK_NUMBER=$(date +%V)
+          WEEK_NUMBER=$((10#$WEEK_NUMBER))   # Force base 10
+
           if [ $((WEEK_NUMBER % 2)) -eq 0 ]; then
             echo "run=true" >> $GITHUB_OUTPUT
           else
             echo "run=false" >> $GITHUB_OUTPUT
           fi
+
 
       - name: Run Python Script
         if: steps.weekcheck.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
