@@ -1,0 +1,41 @@
+name: 🎯 Goal for Goal Seeker
+description: Give the Goal Seeker agent a goal. It will loop toward it, one verified iteration at a time.
+title: "Goal: "
+labels: [goal]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The agent works **only** toward criteria it can verify. Put a runnable command in
+        `backticks` on each success criterion and it will run that command to prove progress.
+        Steer it later by commenting `/goal <instruction>`, `/goal pause`, `/goal resume` or `/goal status`.
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: The end state you want, in one or two sentences.
+      placeholder: Running the weekly job twice in a row produces no duplicate files or empty commits.
+    validations:
+      required: true
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Success criteria
+      description: A checklist. Each item should end with a verification command in backticks.
+      value: |
+        - [ ] Tests exist and pass: `python -m pytest -q`
+        - [ ] <another observable outcome>: `<command that proves it>`
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Non-goals, things not to touch, dependencies not to add.
+      placeholder: No new runtime dependencies. Do not change the output file naming.
+  - type: input
+    id: budget
+    attributes:
+      label: Budget (max iterations)
+      description: Hard cap on loop iterations, including planning. Default 12, maximum 50.
+      value: "8"
